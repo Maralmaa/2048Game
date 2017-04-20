@@ -1,0 +1,25 @@
+Console.CursorVisible = false;
+			while (true)
+			{
+				if (Console.KeyAvailable)
+				{
+					ConsoleKeyInfo key = Console.ReadKey();
+					switch (key.Key)
+					{
+						case ConsoleKey.UpArrow:
+							y = y - 1;
+							break;
+						case ConsoleKey.DownArrow:
+							y = y + 1;
+							break;
+						case ConsoleKey.LeftArrow:
+							x = x - 1;
+							break;
+						case ConsoleKey.RightArrow:
+							x = x + 1;
+							break;
+						case ConsoleKey.Escape:
+							Console.WriteLine("Game over");
+							break;
+					}
+}
