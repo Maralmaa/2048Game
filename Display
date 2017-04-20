@@ -1,0 +1,14 @@
+using System;
+namespace 2048
+{
+	public class Display
+	{
+		public Display()
+		{
+		}
+		public void draw2048(2048 block)
+		{
+			
+		}
+	}
+}
