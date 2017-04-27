@@ -1,14 +1,14 @@
 using System;
-namespace 2048
+
+namespace _2048_game
 {
-	public class Display
-	{
-		public Display()
-		{
-		}
-		public void draw2048(2048 block)
-		{
-			
-		}
-	}
+    class Display
+    {
+        public Display()
+        { 
+        }
+        public void drawBlock(Block tile)
+        { 
+        }
+    }
 }
