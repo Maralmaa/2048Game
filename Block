@@ -1,25 +1,199 @@
-Console.CursorVisible = false;
-			while (true)
-			{
-				if (Console.KeyAvailable)
-				{
-					ConsoleKeyInfo key = Console.ReadKey();
-					switch (key.Key)
-					{
-						case ConsoleKey.UpArrow:
-							y = y - 1;
-							break;
-						case ConsoleKey.DownArrow:
-							y = y + 1;
-							break;
-						case ConsoleKey.LeftArrow:
-							x = x - 1;
-							break;
-						case ConsoleKey.RightArrow:
-							x = x + 1;
-							break;
-						case ConsoleKey.Escape:
-							Console.WriteLine("Game over");
-							break;
-					}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2048_game
+{
+    public class Block
+    {
+
+        public int[2] gameBlock;
+        private Random random;
+        public int score;
+        public const int S_MAX = 3;
+        public const int S_MIN = 0;
+
+        public Block()
+        {
+            score = 0;
+            random = new Random();
+            gameBlock = new int[S_MAX + 1, S_MAX + 1];
+            //randomoor 2 udaaa 2 ymuu 4iig uusgej bna
+            Nemelt();
+            Nemelt();
+            Draw();
+        }
+
+        private void Nemelt()
+        {
+            var zeroLoc = new List<int[]>();
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (gameBlock[i, j] == 0)
+                    {
+                        zeroLoc.Add(new int[2] { i, j });
+                    }
+                }
+            }
+
+            if (zeroLoc.Count() == 0) { return; }
+
+            int[] item = zeroLoc[random.Next(0, zeroLoc.Count())];
+            int outNum;
+
+            outNum = random.Next(0, 2) == 0 ? 2 : 4;
+
+            gameBlock[item[0], item[1]] = outNum;
+        }
+
+        public void Move(string dir)
+        {
+            switch (dir)
+            {
+                case "Right":
+                    for (int i = 0; i < 4; i++) 
+                    { moveTile(-1, 0, i, S_MIN, S_MAX); }
+                    Nemelt();
+                    Draw();
+                    break;
+                case "Up":
+                    for (int i = 0; i < 4; i++) 
+                    { moveTile(1, 1, i, S_MAX, S_MIN); }
+                    Nemelt();
+                    Draw();
+                    break;
+                case "Left":
+                    for (int i = 0; i < 4; i++) 
+                    { moveTile(1, 0, i, S_MAX, S_MIN); }
+                    Nemelt();
+                    Draw();
+                    break;
+                case "Down":
+                    for (int i = 0; i < 4; i++) 
+                    { moveTile(-1, 1, i, S_MIN, S_MAX); }
+                    Nemelt();
+                    Draw();
+                    break;
+            }
+        }
+
+        private void moveTile(int dir, int xy, int index, int end, int start)
+        {
+            switch (xy)
+            {
+                case 0:
+                    int x = start;
+                    while (x != end)
+                    {
+                        RemoveZero(dir, xy, index, end, start, 3);
+                        if (gameBlock[index, x] == gameBlock[index, x + dir])
+                        {
+                            gameBlock[index, x] *= 2;
+                            gameBlock[index, x + dir] = 0;
+                            score += gameBlock[index, x];
+                        }
+                        x += dir;
+                    }
+
+                    break;
+
+                case 1:
+                    int y = start;
+                    while (y != end)
+                    {
+                        RemoveZero(dir, xy, index, end, start, 2);
+                        if (gameBlock[y, index] == gameBlock[y + dir, index])
+                        {
+                            gameBlock[y, index] *= 2;
+                            gameBlock[y + dir, index] = 0;
+                            score += gameBlock[y, index];
+                        }
+                        y += dir;
+                    }
+
+                    break;
+            }
+
+
+        }
+        private void RemoveZero(int dir, int xy, int index, int end, int start, int n)
+        {
+
+            switch (xy)
+            {
+                case 0:
+                    int x = start;
+                    while (x != end)
+                    {
+                        if ((gameBlock[index, x + dir] != 0) && (gameBlock[index, x] == 0))
+                        {
+                            gameBlock[index, x] = gameBlock[index, x + dir];
+                            gameBlock[index, x + dir] = 0;
+                        }
+                        x += dir;
+                    }
+
+                    break;
+
+                case 1:
+                    int y = start;
+                    while (y != end)
+                    {
+                        if ((gameBlock[y + dir, index] != 0) && (gameBlock[y, index] == 0))
+                        {
+                            gameBlock[y, index] = gameBlock[y + dir, index];
+                            gameBlock[y + dir, index] = 0;
+                        }
+                        y += dir;
+                    }
+
+                    break;
+            }
+            if (n > 0) { RemoveZero(dir, xy, index, end, start, (n - 1)); }
+            else { return; }
+        }
+
+        private void Draw()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Score: " + score + "\n");
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    Color(i, j);
+                    Console.Write(string.Format("{0,4} ", gameBlock[i, j]));
+                }
+                Console.Write(Environment.NewLine + Environment.NewLine);
+            }
+        }
+        enum Colors
+        {
+            DarkGray = 0,
+            Blue = 2,
+            Red = 4,
+            Magenta = 8,
+            Yellow = 16,
+            Green = 32,
+            Cyan = 64,
+            Grey = 128,
+            DarkBlue = 256,
+            DarkRed = 512,
+            DarkMagenta = 1024,
+            White = 2048
+        }
+        private void Color(int i, int j)
+        {
+            int val = gameBlock[i, j];
+            string mycolorvalue = ((Colors)val).ToString();
+            ConsoleColor myCC;
+            if (Enum.TryParse(mycolorvalue, out myCC))
+                Console.ForegroundColor = myCC;
+        }
+    }
 }
