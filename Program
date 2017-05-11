@@ -1,0 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2048_game
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var game = new Board();
+            ConsoleKeyInfo info;
+            do
+            {
+                info = Console.ReadKey();
+                game.Move(info);
+            } while (info.Key != ConsoleKey.Escape);
+
+        }
+    }
+}
