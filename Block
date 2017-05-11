@@ -12,14 +12,18 @@ namespace _2048_game
         public int[2] gameBlock;
         private Random random;
         public int score;
-        public const int S_MAX = 3;
-        public const int S_MIN = 0;
+        public const int MAX = 3;
+        public const int MIN = 0;
+        int right = -1;
+        int up = 1;
+        int left = 1;
+        int down = -1;
 
         public Block()
         {
             score = 0;
             random = new Random();
-            gameBlock = new int[S_MAX + 1, S_MAX + 1];
+            gameBlock = new int[MAX + 1, MAX + 1];
             //randomoor 2 udaaa 2 ymuu 4iig uusgej bna
             Nemelt();
             Nemelt();
@@ -56,25 +60,25 @@ namespace _2048_game
             {
                 case "Right":
                     for (int i = 0; i < 4; i++) 
-                    { moveTile(-1, 0, i, S_MIN, S_MAX); }
+                    { moveTile(right, 0, i, S_MIN, S_MAX); }
                     Nemelt();
                     Draw();
                     break;
                 case "Up":
                     for (int i = 0; i < 4; i++) 
-                    { moveTile(1, 1, i, S_MAX, S_MIN); }
+                    { moveTile(up, 1, i, S_MAX, S_MIN); }
                     Nemelt();
                     Draw();
                     break;
                 case "Left":
                     for (int i = 0; i < 4; i++) 
-                    { moveTile(1, 0, i, S_MAX, S_MIN); }
+                    { moveTile(left, 0, i, S_MAX, S_MIN); }
                     Nemelt();
                     Draw();
                     break;
                 case "Down":
                     for (int i = 0; i < 4; i++) 
-                    { moveTile(-1, 1, i, S_MIN, S_MAX); }
+                    { moveTile(down, 1, i, S_MIN, S_MAX); }
                     Nemelt();
                     Draw();
                     break;
@@ -153,8 +157,6 @@ namespace _2048_game
 
                     break;
             }
-            if (n > 0) { RemoveZero(dir, xy, index, end, start, (n - 1)); }
-            else { return; }
         }
 
         private void Draw()
